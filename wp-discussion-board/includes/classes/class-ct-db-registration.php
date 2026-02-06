@@ -431,12 +431,14 @@ if (!class_exists('CT_DB_Registration')) { // Don't initialise if there's alread
 							grecaptcha.reset(widget_id);
 						}
 
-						document.querySelector('.ctdb-header[data-form-id="ctdb-registration-wrap"]').addEventListener('click', function() {
-							ctdb_recaptcha_reset(window.ctdbregwidgetid);
-							document.querySelector('#ctdb_registration_form .grecaptcha-badge').setAttribute('style', `
-							width: 256px; height: 60px; display: block; transition: right 0.3s ease 0s; position: fixed; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-radius: 2px; overflow: hidden;
-							`);
-						});
+						if (document.querySelector('.ctdb-header[data-form-id="ctdb-registration-wrap"]')) {
+							document.querySelector('.ctdb-header[data-form-id="ctdb-registration-wrap"]').addEventListener('click', function() {
+								ctdb_recaptcha_reset(window.ctdbregwidgetid);
+								document.querySelector('#ctdb_registration_form .grecaptcha-badge').setAttribute('style', `
+								width: 256px; height: 60px; display: block; transition: right 0.3s ease 0s; position: fixed; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-radius: 2px; overflow: hidden;
+								`);
+							});
+						}
 
 						if (document.querySelector('.ctdb-header[data-form-id="ctdb-login-wrap"]')) {
 							document.querySelector('.ctdb-header[data-form-id="ctdb-login-wrap"]').addEventListener('click', function() {
