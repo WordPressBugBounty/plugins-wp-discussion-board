@@ -1,10 +1,10 @@
 === Discussion Board - WordPress Forum Plugin ===
 Contributors: marketingfire
 Tags: wordpress forum, forum plugin, discussion board, community, support forum
-Requires at least: 4.3
-Tested up to: 6.9
+Requires at least: 5.6
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.5.8
+Stable tag: 2.5.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -183,17 +183,17 @@ Be careful if you are copying and pasting the shortcodes - you might need to del
 
 == Changelog ==
 
-= 2.5.8, January 12, 2026 =
+= 2.5.9, May 26, 2026 =
+*Improved: Updated and tested for WordPress version 7.0
 
+= 2.5.8, January 12, 2026 =
 *Fixed: Critical error impacting Discussion Boards Profiles functionality.
 *Fixed: Plugin Vulnerability to Broken Access Control
 
 = 2.5.7, October 27, 2025 =
-
 *Fixed: Issue where author names were not displaying correctly on some topic boards.
 
 = 2.5.6, October 22, 2025 =
-
 *Fixed: Authenticated (Subscriber+) Arbitrary Shortcode Execution
 *Improved: Users can now create a topic without needing to add content or a description.
 
