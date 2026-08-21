@@ -2,9 +2,9 @@
 Contributors: marketingfire
 Tags: wordpress forum, forum plugin, discussion board, community, support forum
 Requires at least: 5.6
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.5.9
+Stable tag: 2.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -182,6 +182,9 @@ Be careful if you are copying and pasting the shortcodes - you might need to del
 7. Table layout of Discussion Board list 
 
 == Changelog ==
+
+= 2.6.0, August 21, 2026 =
+*Fixed: Invisible reCAPTCHA could cause user registration to fail.
 
 = 2.5.9, May 26, 2026 =
 *Improved: Updated and tested for WordPress version 7.0
