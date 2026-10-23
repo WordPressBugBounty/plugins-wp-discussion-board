@@ -36,6 +36,12 @@ if (!class_exists('CT_DB_Front_End')) {
 
 			add_filter('the_content', array($this, 'filter_single_content'));
 
+			// Enforce viewer roles outside single topic pages: search, feeds, sitemaps, recent comments
+			add_filter('posts_where', array($this, 'exclude_restricted_topics'), 10, 2);
+			add_filter('comment_feed_where', array($this, 'exclude_restricted_topic_comments'));
+			add_filter('widget_comments_args', array($this, 'exclude_restricted_topic_comments_args'));
+			add_filter('wp_sitemaps_post_types', array($this, 'exclude_restricted_topics_sitemap'));
+
 			// If the user can view but can't post, filter off the comment fields
 			add_filter('get_comment_text', array($this, 'oembed_comments_filter'), 1, 1);
 			add_filter('comments_template', array($this, 'filter_comments'));
@@ -394,6 +400,80 @@ if (!class_exists('CT_DB_Front_End')) {
 			}
 
 			return $content;
+		}
+
+		/*
+		 * Whether topics must be hidden from the current visitor
+		 * Called directly because $this->user_can_view is only set on 'wp', after the main query runs
+		 * @since 2.6.1
+		 */
+		public function is_viewing_restricted()
+		{
+			if (is_admin() && !wp_doing_ajax()) {
+				return false;
+			}
+			return !ctdb_is_user_permitted();
+		}
+
+		/*
+		 * Remove topics from search results and feeds for users who can't view them
+		 * @since 2.6.1
+		 */
+		public function exclude_restricted_topics($where, $query)
+		{
+			if (($query->is_search() || $query->is_feed()) && $this->is_viewing_restricted()) {
+				global $wpdb;
+				$where .= $wpdb->prepare(" AND {$wpdb->posts}.post_type != %s", 'discussion-topics');
+			}
+			return $where;
+		}
+
+		/*
+		 * Remove topic replies from comment feeds for users who can't view them
+		 * @since 2.6.1
+		 */
+		public function exclude_restricted_topic_comments($where)
+		{
+			if ($this->is_viewing_restricted()) {
+				global $wpdb;
+				$where .= $wpdb->prepare(
+					" AND {$wpdb->comments}.comment_post_ID NOT IN ( SELECT ctdb_topics.ID FROM {$wpdb->posts} AS ctdb_topics WHERE ctdb_topics.post_type = %s )",
+					'discussion-topics'
+				);
+			}
+			return $where;
+		}
+
+		/*
+		 * Remove topic replies from the Recent Comments widget and Latest Comments block
+		 * @since 2.6.1
+		 */
+		public function exclude_restricted_topic_comments_args($args)
+		{
+			if ($this->is_viewing_restricted()) {
+				$post_types = !empty($args['post_type']) ? (array) $args['post_type'] : get_post_types(array('public' => true));
+				$post_types = array_values(array_diff($post_types, array('discussion-topics')));
+				if (empty($post_types)) {
+					// An empty post_type means any post type to WP_Comment_Query, so match nothing instead
+					unset($args['post_type']);
+					$args['post__in'] = array(0);
+				} else {
+					$args['post_type'] = $post_types;
+				}
+			}
+			return $args;
+		}
+
+		/*
+		 * Remove topics from the core XML sitemap for users who can't view them
+		 * @since 2.6.1
+		 */
+		public function exclude_restricted_topics_sitemap($post_types)
+		{
+			if ($this->is_viewing_restricted()) {
+				unset($post_types['discussion-topics']);
+			}
+			return $post_types;
 		}
 
 		/**

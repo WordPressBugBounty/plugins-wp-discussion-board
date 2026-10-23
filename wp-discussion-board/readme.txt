@@ -4,7 +4,7 @@ Tags: wordpress forum, forum plugin, discussion board, community, support forum
 Requires at least: 5.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.6.0
+Stable tag: 2.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -186,6 +186,10 @@ Please report security bugs found in the source code of the WP Discussion Board 
 7. Table layout of Discussion Board list 
 
 == Changelog ==
+
+= 2.6.1, October 20, 2026 =
+*Fixed: Stored XSS via user profile Website field.
+*Fixed: Plugin Vulnerability to Broken Access Control: restricted topics and their replies were exposed in search results, RSS feeds and sitemaps.
 
 = 2.6.0, August 21, 2026 =
 *Fixed: Invisible reCAPTCHA could cause user registration to fail.

@@ -85,11 +85,12 @@ function ctdb_filter_comment_author_name( $return, $author, $comment_id ) {
 		}
 
 		if( $user ) {
-			$author = $user->$display_as;
+			$author = esc_html( $user->$display_as );
+			$url    = esc_url( $url );
 			if( empty( $url ) || 'http://' == $url ) {
 				$return = $author;
 			} else {
-				$return = "<a href='$url' rel='external nofollow' class='url'>$author</a>";
+				$return = '<a href="' . $url . '" rel="external nofollow" class="url">' . $author . '</a>';
 			}
 		} else {
 			return $author;
